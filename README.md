@@ -1,15 +1,23 @@
 # ECE 5510 Homework 2 Part II Template
 
-You must use this template to submit your solution to Part II of Homework 2. 
-Your assignment may not be graded otherwise.
+## Contact
+
+Contact the course TA for any questions
 
 ## Overview
+
+
+You must use this template to submit your solution to Part II of Homework 2. 
+Your assignment may not be graded otherwise. 
+**Submit your solution as a zip file on Canvas.** 
 
 This template comes with its own set of unit test that you must satisfy before submission to be considered for full credit. 
 We will check your source files only for accepted tests to ensure that the respective solutions meets specifications and grade accordingly.
 
 **DO NOT MODIFY THE UNIT TESTS. YOUR SUBMISSION MAY NOT BE GRADED OTHERWISE.**
 If you believe there is an error in the unit test, notify the TA immediately. 
+
+You are free to modify any other part of the source code.
 
 ## Building and Running the template
 
