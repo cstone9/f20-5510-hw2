@@ -20,7 +20,7 @@ class SubmissionTest1 {
     @Test
     void TestLBakery_NoMoreThanL() throws InterruptedException {
         int l = 4, n = 10;
-        ExecutorService executorService = Executors.newFixedThreadPool(l);
+        ExecutorService executorService = getExecutorService(l);
         Lock lBakery = new LBakery(l, n);
         IntStream.range(0, l)
                 .forEach(user -> executorService.execute(lBakery::lock));
@@ -43,7 +43,7 @@ class SubmissionTest1 {
     @Test
     void TestLBakery_AtleastL() {
         int l = 4, n = 10;
-        ExecutorService executorService = Executors.newFixedThreadPool(l);
+        ExecutorService executorService = getExecutorService(l);
         Lock lBakery = new LBakery(l, n);
         IntStream.range(0, l - 1)
                 .forEach(user -> executorService.execute(lBakery::lock));
@@ -55,7 +55,7 @@ class SubmissionTest1 {
     @Test
     void TestBinaryTreePeterson_BoundedTimeLocking() {
         int n = 8;
-        ExecutorService executorService = Executors.newFixedThreadPool(n);
+        ExecutorService executorService = getExecutorService(n);
         Lock tPeterson = new TreePeterson(n);
         IntStream.range(0, n-1)
                 .forEach(user -> executorService.execute(() -> {
@@ -92,7 +92,7 @@ class SubmissionTest1 {
     @Test
     void TestBakery_BoundedTimeLocking() {
         int n = 8;
-        ExecutorService executorService = Executors.newFixedThreadPool(n, new UnitTestThreadFactory());
+        ExecutorService executorService = getExecutorService(n);
         Lock bakery = new Bakery(n);
         IntStream.range(0, n-1)
                 .forEach(user -> executorService.execute(() -> {
@@ -124,6 +124,10 @@ class SubmissionTest1 {
         bakery.unlock();
         Thread.sleep(100);
         assertFalse(t.isAlive());
+    }
+
+    private ExecutorService getExecutorService(int n) {
+        return Executors.newFixedThreadPool(n, new UnitTestThreadFactory());
     }
 
     static class UnitTestThread extends Thread implements ThreadId {
