@@ -134,6 +134,10 @@ class SubmissionTest1 {
 
         private static int ID_GEN = 0;
 
+        public static void reset() {
+            ID_GEN = 0;
+        }
+
         private int id;
 
         UnitTestThread(Runnable runnable) {
@@ -145,9 +149,15 @@ class SubmissionTest1 {
         public int getThreadId() {
             return id;
         }
+
+
     }
 
     static class UnitTestThreadFactory implements ThreadFactory {
+
+        UnitTestThreadFactory() {
+            UnitTestThread.reset();
+        }
 
         @Override
         public Thread newThread(Runnable r) {
