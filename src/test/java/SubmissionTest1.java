@@ -1,3 +1,4 @@
+import edu.vt.ece.bench.ThreadId;
 import edu.vt.ece.locks.Bakery;
 import edu.vt.ece.locks.LBakery;
 import edu.vt.ece.locks.Lock;
@@ -6,6 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
 import java.util.stream.IntStream;
 
 import static java.time.Duration.ofMillis;
@@ -90,7 +92,7 @@ class SubmissionTest1 {
     @Test
     void TestBakery_BoundedTimeLocking() {
         int n = 8;
-        ExecutorService executorService = Executors.newFixedThreadPool(n);
+        ExecutorService executorService = Executors.newFixedThreadPool(n, new UnitTestThreadFactory());
         Lock bakery = new Bakery(n);
         IntStream.range(0, n-1)
                 .forEach(user -> executorService.execute(() -> {
@@ -114,7 +116,7 @@ class SubmissionTest1 {
         Lock bakery = new Bakery(n);
         bakery.lock();
 
-        Thread t = new Thread(bakery::lock);
+        UnitTestThread t = new UnitTestThread(bakery::lock);
         t.start();
         Thread.sleep(1000);
         assertTrue(t.isAlive());
@@ -122,6 +124,28 @@ class SubmissionTest1 {
         bakery.unlock();
         Thread.sleep(100);
         assertFalse(t.isAlive());
+    }
+
+    static class UnitTestThread extends Thread implements ThreadId {
+
+        private int ID_GEN = 0;
+
+        UnitTestThread(Runnable runnable) {
+            super(runnable);
+        }
+
+        @Override
+        public int getThreadId() {
+            return ID_GEN++;
+        }
+    }
+
+    static class UnitTestThreadFactory implements ThreadFactory {
+
+        @Override
+        public Thread newThread(Runnable r) {
+            return new UnitTestThread(r);
+        }
     }
 }
 
