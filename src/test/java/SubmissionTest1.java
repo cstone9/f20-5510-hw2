@@ -132,7 +132,7 @@ class SubmissionTest1 {
 
     static class UnitTestThread extends Thread implements ThreadId {
 
-        private int ID_GEN = 0;
+        private static int ID_GEN = 0;
 
         UnitTestThread(Runnable runnable) {
             super(runnable);
