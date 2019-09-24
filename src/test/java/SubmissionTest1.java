@@ -1,8 +1,5 @@
 import edu.vt.ece.bench.ThreadId;
-import edu.vt.ece.locks.Bakery;
-import edu.vt.ece.locks.LBakery;
-import edu.vt.ece.locks.Lock;
-import edu.vt.ece.locks.TreePeterson;
+import edu.vt.ece.locks.*;
 import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.ExecutorService;
@@ -18,6 +15,42 @@ import static org.junit.jupiter.api.Assertions.*;
 class SubmissionTest1 {
 
     @Test
+    void TestFilter_NoMoreThan1() throws InterruptedException {
+        int n = 8;
+        Lock filter = new Filter(n);
+        run(filter);
+
+        UnitTestThread t = new UnitTestThread(filter::lock);
+        t.start();
+        Thread.sleep(1000);
+        assertTrue(t.isAlive());
+
+        stop(filter);
+        Thread.sleep(100);
+        assertFalse(t.isAlive());
+    }
+
+    private void stop(Lock lock) {
+        synchronized (lock) {
+            lock.notifyAll();
+        }
+    }
+
+    private void run(Lock lock) {
+        new UnitTestThread(() -> {
+            lock.lock();
+            try {
+                synchronized (lock) {
+                    lock.wait();
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            lock.unlock();
+        }).start();
+    }
+
+    @Test
     void TestLBakery_NoMoreThanL() throws InterruptedException {
         int l = 4, n = 10;
         ExecutorService executorService = getExecutorService(l);
@@ -26,7 +59,7 @@ class SubmissionTest1 {
                 .forEach(user -> executorService.execute(lBakery::lock));
         executorService.shutdown();
 
-        Thread t = new Thread(lBakery::lock);
+        UnitTestThread t = new UnitTestThread(lBakery::lock);
         t.start();
         Thread.sleep(1000);
         assertTrue(t.isAlive());
@@ -37,7 +70,7 @@ class SubmissionTest1 {
     void TestLBakery_Atleast1() {
         int l = 1, n = 10;
         Lock lBakery = new LBakery(l, n);
-        assertTimeout(ofMillis(10), lBakery::lock);
+        assertTimeout(ofMillis(10), () -> new UnitTestThread(lBakery::lock).start());
     }
 
     @Test
@@ -49,7 +82,7 @@ class SubmissionTest1 {
                 .forEach(user -> executorService.execute(lBakery::lock));
         executorService.shutdown();
 
-        assertTimeout(ofMillis(10), lBakery::lock);
+        assertTimeout(ofMillis(10), () -> new UnitTestThread(lBakery::lock).start());
     }
 
     @Test
@@ -69,7 +102,7 @@ class SubmissionTest1 {
                 }));
         executorService.shutdown();
 
-        assertTimeout(ofSeconds(1), tPeterson::lock);
+        assertTimeout(ofSeconds(1), () -> new UnitTestThread(tPeterson::lock).start());
         tPeterson.unlock();
     }
 
@@ -77,14 +110,14 @@ class SubmissionTest1 {
     void TestBinaryTreePeterson_NoMoreThan1() throws InterruptedException {
         int n = 8;
         Lock tPeterson = new TreePeterson(n);
-        tPeterson.lock();
+        run(tPeterson);
 
-        Thread t = new Thread(tPeterson::lock);
+        UnitTestThread t = new UnitTestThread(tPeterson::lock);
         t.start();
         Thread.sleep(1000);
         assertTrue(t.isAlive());
 
-        tPeterson.unlock();
+        stop(tPeterson);
         Thread.sleep(100);
         assertFalse(t.isAlive());
     }
@@ -114,14 +147,14 @@ class SubmissionTest1 {
     void TestBakery_NoMoreThan1() throws InterruptedException {
         int n = 8;
         Lock bakery = new Bakery(n);
-        bakery.lock();
+        run(bakery);
 
         UnitTestThread t = new UnitTestThread(bakery::lock);
         t.start();
         Thread.sleep(1000);
         assertTrue(t.isAlive());
 
-        bakery.unlock();
+        stop(bakery);
         Thread.sleep(100);
         assertFalse(t.isAlive());
     }
