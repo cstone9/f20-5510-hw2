@@ -84,7 +84,7 @@ class SubmissionTest1 {
     void TestLBakery_Atleast1() {
         int l = 1, n = 10;
         Lock lBakery = new LBakery(l, n);
-        assertTimeout(ofMillis(10), () -> new UnitTestThread(lBakery::lock).start());
+        assertTimeout(ofMillis(10), lBakery::lock);
     }
 
     @Test
@@ -96,7 +96,7 @@ class SubmissionTest1 {
                 .forEach(user -> executorService.execute(lBakery::lock));
         executorService.shutdown();
 
-        assertTimeout(ofMillis(10), () -> new UnitTestThread(lBakery::lock).start());
+        assertTimeout(ofMillis(10), lBakery::lock);
     }
 
     @Test
@@ -116,7 +116,7 @@ class SubmissionTest1 {
                 }));
         executorService.shutdown();
 
-        assertTimeout(ofSeconds(1), () -> new UnitTestThread(tPeterson::lock).start());
+        assertTimeout(ofSeconds(1), tPeterson::lock);
         tPeterson.unlock();
     }
 
