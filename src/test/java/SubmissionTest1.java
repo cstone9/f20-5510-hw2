@@ -134,13 +134,16 @@ class SubmissionTest1 {
 
         private static int ID_GEN = 0;
 
+        private int id;
+
         UnitTestThread(Runnable runnable) {
             super(runnable);
+            id = ID_GEN++;
         }
 
         @Override
         public int getThreadId() {
-            return ID_GEN++;
+            return id;
         }
     }
 
