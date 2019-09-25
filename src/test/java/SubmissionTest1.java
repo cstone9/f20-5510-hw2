@@ -1,5 +1,7 @@
 import edu.vt.ece.bench.ThreadId;
 import edu.vt.ece.locks.*;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.extension.ExtensionContext;
@@ -19,6 +21,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SubmissionTest1.TestInterceptor.class)
 class SubmissionTest1 {
+
+    @BeforeEach
+    void setUp() {
+        UnitTestThread.reset();
+    }
 
     @Test
     void TestFilter_NoMoreThan1() throws InterruptedException {
@@ -202,9 +209,9 @@ class SubmissionTest1 {
 
     static class UnitTestThreadFactory implements ThreadFactory {
 
-        UnitTestThreadFactory() {
-            UnitTestThread.reset();
-        }
+//        UnitTestThreadFactory() {
+//            UnitTestThread.reset();
+//        }
 
         @Override
         public Thread newThread(Runnable r) {
