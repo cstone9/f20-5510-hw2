@@ -62,11 +62,6 @@ class SubmissionTest2 {
     }
 
     @Test
-    void TestTest2_Peterson_8Thread() throws IllegalAccessException, ClassNotFoundException, InstantiationException, IOException, InterruptedException {
-        TestTest2Helper("Peterson", "8", "32000");
-    }
-
-    @Test
     void TestTest2_Filter_8Thread() throws IllegalAccessException, ClassNotFoundException, InstantiationException, IOException, InterruptedException {
         TestTest2Helper("Filter", "8", "32000");
     }
