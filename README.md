@@ -1,8 +1,8 @@
-# ECE 5510 Homework 2 Part II Template
+# ECE 5510 Homework 2 Part II Template (Fall 2020)
 
 ## Contact
 
-Contact the course TA for any questions. You will be notified when the contents of this repository changes.
+Please use the HW2 discussion forum on Canvas for any questions.
 
 ## Overview
 
@@ -14,7 +14,7 @@ This template comes with its own set of unit test that you must satisfy before s
 We will check your source files only for accepted tests to ensure that the respective solutions meets specifications and grade accordingly.
 
 **DO NOT MODIFY THE PROVIDED UNIT TESTS. YOUR SUBMISSION MAY NOT BE GRADED OTHERWISE.**
-If you believe there is an error in the unit test, notify the TA immediately. 
+If you believe there is an error in the unit test, notify the TA <stonecat@vt.edu> immediately. 
 
 You are free to modify any other part of the source code.
 
